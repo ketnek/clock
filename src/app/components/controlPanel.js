@@ -1,6 +1,6 @@
 import React from "react";
 import { FaPlay, FaPause, FaSyncAlt } from 'react-icons/fa';
-import './constrollPanel.css';
+import './controlPanel.css';
 
 
 export const ControlPanel = () => {
