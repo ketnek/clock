@@ -1,0 +1,7 @@
+#timer {
+  grid-column: 1/3;
+  text-align: center;
+  border: 3px solid var(--red);
+  border-radius: 30px;
+  padding: 0.5rem 2.5rem;
+}

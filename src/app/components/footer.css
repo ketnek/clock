@@ -1,0 +1,9 @@
+#footer {
+  grid-column: 1 / 3;
+  text-align: center;
+  font-size: 0.6rem;
+}
+
+#footer p {
+  margin: 0;
+}

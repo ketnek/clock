@@ -1,0 +1,9 @@
+#break {
+  text-align: center;
+}
+
+@media screen and (max-width: 500px) {
+  #break-label {
+    padding: 0 35px 0 35px;
+  }
+}
