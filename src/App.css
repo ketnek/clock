@@ -20,6 +20,6 @@
 
 @media screen and (max-width: 500px) {
   #app {
-    grid-template-rows: 70px 120px 150px 50px 50px;
+    grid-template-rows: 100px 120px 150px 50px 50px;
   }
 }
