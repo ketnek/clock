@@ -3,6 +3,7 @@
   display: flex;
   gap: 5px;
   font-size: 1.4rem;
+  cursor: pointer;
 }
 
 #start_stop svg {

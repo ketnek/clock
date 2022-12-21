@@ -2,8 +2,9 @@ import React from "react";
 import './timerDisplay.css';
 
 
-export const TimerDisplay = () => {
+export const TimerDisplay = ({ time }) => {
+
   return (
-    <p id="time-left">25:00</p>
+    <p id="time-left">{time}</p>
   );
 }
