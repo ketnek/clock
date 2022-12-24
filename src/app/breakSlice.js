@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   status: 'Break',
-  value: 0.1
+  value: 5
 };
 
 const breakSlice = createSlice({

@@ -1,33 +1,32 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FaPlay, FaPause, FaSyncAlt } from 'react-icons/fa';
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setDisplayValue } from "../timerDisplaySlice";
 import './controlPanel.css';
 
 
 export const ControlPanel = () => {
-  // const dispatch = useDispatch();
-  let sessionValue = useSelector((state) => state.sessionTime.value) * 60;
+  const dispatch = useDispatch();
 
-  let breakValue = useSelector((state) => state.breakTime.value);
+  let test = useSelector((state) => state.sessionTime.value) * 60 - 1;
+
+  const handleClick = (time) => {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+
+    seconds = seconds < 10 ? `0${seconds}` : seconds;
+
+    dispatch(setDisplayValue(`${minutes}:${seconds}`));
+
+    test--;
+  };
 
 
-
-  const handleClick = (sessionLength, breakLength) => {
-
-    let minutes = Math.floor(sessionLength / 60);
-    let seconds = sessionLength % 60;
-
-    seconds < 10 ? seconds = `0${seconds}` : seconds = seconds;
-
-    sessionValue--;
-
-    // dispatch(setTime(`${minutes}:${seconds}`));
-  }
 
   return (
     <div id="controlPanel">
 
-      <div onClick={() => handleClick(sessionValue)} id="start_stop">
+      <div onClick={() => handleClick(test)} id="start_stop">
         <FaPlay />
         <FaPause />
       </div>

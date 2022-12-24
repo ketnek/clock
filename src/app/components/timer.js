@@ -7,15 +7,14 @@ import './timer.css';
 
 export const Timer = () => {
 
-  const status = useSelector((state) => state.sessionTime.status);
-  const time = useSelector((state) => state.sessionTime.value);
+  const displayTime = useSelector(state => state.displayTime.value);
 
   return (
     <div id="timer">
-      <TimerLabel
-        status={status} />
+      <TimerLabel />
       <TimerDisplay
-        time={time} />
+        displayTime={displayTime}
+      />
     </div>
   );
 }

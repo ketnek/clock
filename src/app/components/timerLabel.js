@@ -2,8 +2,8 @@ import React from "react";
 import './timerLabel.css';
 
 
-export const TimerLabel = ({ status }) => {
+export const TimerLabel = ({ sessionStatus, breakStatus }) => {
   return (
-    <p id="timer-label">{status}</p>
+    <p id="timer-label">{sessionStatus}</p>
   );
 }
