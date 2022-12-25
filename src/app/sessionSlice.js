@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  status: 'Session',
-  value: 25
+  value: 1
 };
 
 const sessionSlice = createSlice({

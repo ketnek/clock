@@ -9,9 +9,12 @@ export const Timer = () => {
 
   const displayTime = useSelector(state => state.displayTime.value);
 
+  const displayTimerStatus = useSelector(status => status.displayTime.status);
+
   return (
     <div id="timer">
-      <TimerLabel />
+      <TimerLabel
+        timerStatus={displayTimerStatus} />
       <TimerDisplay
         displayTime={displayTime}
       />

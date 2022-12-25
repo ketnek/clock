@@ -1,16 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaPlay, FaPause, FaSyncAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from "react-redux";
-import { setDisplayValue } from "../timerDisplaySlice";
+import { decrementInputTime, setInputTime } from "../controlSlice";
+import { setDisplayValue, setTimerStatus } from "../timerDisplaySlice";
 import './controlPanel.css';
 
 
 export const ControlPanel = () => {
   const dispatch = useDispatch();
 
-  let test = useSelector((state) => state.sessionTime.value) * 60 - 1;
+  let displayTime = useSelector(state => state.displayTime.value);
+
+  let sessionTime = useSelector(state => state.sessionTime.value) * 60;
+
+  let breakTime = useSelector(state =>
+    state.breakTime.value) * 60;
+
+  let timerStatus = useSelector(state => state.displayTime.status);
+
+
+  useEffect(() => {
+    dispatch(setDisplayValue(`${sessionTime / 60}:00`));
+    dispatch(setInputTime(sessionTime));
+  }, [sessionTime, dispatch]);
+
+  let inputTime = useSelector(state => state.inputTime.value);
+
+
 
   const handleClick = (time) => {
+
     let minutes = Math.floor(time / 60);
     let seconds = time % 60;
 
@@ -18,7 +37,24 @@ export const ControlPanel = () => {
 
     dispatch(setDisplayValue(`${minutes}:${seconds}`));
 
-    test--;
+    dispatch(decrementInputTime());
+
+
+    if (inputTime < 0 && timerStatus === 'Session') {
+      inputTime = dispatch(setInputTime(breakTime - 1));
+      dispatch(setTimerStatus('Break'));
+      dispatch(setDisplayValue(`${breakTime / 60}:00`));
+
+
+
+    } else if (inputTime < 0 && timerStatus === 'Break') {
+      inputTime = dispatch(setInputTime(sessionTime - 1));
+      dispatch(setTimerStatus('Session'));
+      dispatch(setDisplayValue(`${sessionTime / 60}:00`));
+
+
+    }
+
   };
 
 
@@ -26,7 +62,7 @@ export const ControlPanel = () => {
   return (
     <div id="controlPanel">
 
-      <div onClick={() => handleClick(test)} id="start_stop">
+      <div onClick={() => handleClick(inputTime)} id="start_stop">
         <FaPlay />
         <FaPause />
       </div>
