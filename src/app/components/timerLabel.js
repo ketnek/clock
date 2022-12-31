@@ -2,8 +2,8 @@ import React from "react";
 import './timerLabel.css';
 
 
-export const TimerLabel = ({ timerStatus }) => {
+export const TimerLabel = ({ timerStatus, timerEnds }) => {
   return (
-    <p id="timer-label">{timerStatus}</p>
+    <p className={timerEnds ? 'warning' : ''} id="timer-label">{timerStatus}</p>
   );
 }

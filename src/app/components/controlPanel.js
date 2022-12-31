@@ -1,76 +1,142 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { FaPlay, FaPause, FaSyncAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from "react-redux";
-import { decrementInputTime, setInputTime } from "../controlSlice";
-import { setDisplayValue, setTimerStatus } from "../timerDisplaySlice";
+import { setDisplayValue, setTimerEnds, setTimerStatus } from "../timerDisplaySlice";
 import './controlPanel.css';
+import Sound from '../../audio/race-start-beeps-125125.mp3';
 
 
 export const ControlPanel = () => {
+
+  const sessionTime = useSelector(state => state.sessionTime.value);
+  const inputSessionInSeconds = useRef(sessionTime * 60 - 1);
+  const breakTime = useSelector(state => state.breakTime.value);
+  const inputBreakInSeconds = useRef(breakTime * 60 - 1);
+  const timerStatus = useSelector(state => state.displayTime.status);
+
+
   const dispatch = useDispatch();
+  const audioRef = useRef();
+  const timerIntervallStatus = useRef('off');
+  const timerIntervallId = useRef();
 
-  let displayTime = useSelector(state => state.displayTime.value);
-
-  let sessionTime = useSelector(state => state.sessionTime.value) * 60;
-
-  let breakTime = useSelector(state =>
-    state.breakTime.value) * 60;
-
-  let timerStatus = useSelector(state => state.displayTime.status);
 
 
   useEffect(() => {
-    dispatch(setDisplayValue(`${sessionTime / 60}:00`));
-    dispatch(setInputTime(sessionTime));
-  }, [sessionTime, dispatch]);
-
-  let inputTime = useSelector(state => state.inputTime.value);
+    dispatch(setTimerStatus(timerStatus));
+    dispatch(setDisplayValue(sessionTime < 10 ? `0${sessionTime}:00` : `${sessionTime}:00`));
+  })
 
 
 
-  const handleClick = (time) => {
-
-    let minutes = Math.floor(time / 60);
-    let seconds = time % 60;
-
-    seconds = seconds < 10 ? `0${seconds}` : seconds;
-
-    dispatch(setDisplayValue(`${minutes}:${seconds}`));
-
-    dispatch(decrementInputTime());
 
 
-    if (inputTime < 0 && timerStatus === 'Session') {
-      inputTime = dispatch(setInputTime(breakTime - 1));
-      dispatch(setTimerStatus('Break'));
-      dispatch(setDisplayValue(`${breakTime / 60}:00`));
+  const timerFunction = (inputSessionTime, inputBreakTime) => {
+
+    console.log(`session:${inputSessionInSeconds.current}`);
+    console.log(`break:${inputBreakInSeconds.current}`);
+    if (timerStatus === 'Session') {
+
+      let minutes = Math.floor(inputSessionTime / 60);
+      let seconds = inputSessionTime % 60;
+
+      minutes = minutes < 10 ? `0${minutes}` : minutes;
+      seconds = seconds < 10 ? `0${seconds}` : seconds;
+      dispatch(setDisplayValue(`${minutes}:${seconds}`));
+
+      inputSessionInSeconds.current--;
+
+      if (inputSessionInSeconds.current < 0) {
+
+        setTimeout(() => dispatch(setTimerStatus('Break')), 1000);
+        inputSessionInSeconds.current = sessionTime * 60;
+      } else if (inputSessionInSeconds.current < 3) {
+        audioRef.current.play();
+
+      }
+      if (inputSessionInSeconds.current < 59) {
+        dispatch(setTimerEnds(true));
+      } else {
+        dispatch(setTimerEnds(false));
+      }
+
+    } else if (timerStatus === 'Break') {
+
+      let minutes = Math.floor(inputBreakTime / 60);
+      let seconds = inputBreakTime % 60;
+
+      minutes = minutes < 10 ? `0${minutes}` : minutes;
+      seconds = seconds < 10 ? `0${seconds}` : seconds;
+
+      dispatch(setDisplayValue(`${minutes}:${seconds}`));
+
+      inputBreakInSeconds.current--;
+
+      if (inputBreakInSeconds.current < 0) {
+
+        setTimeout(() => dispatch(setTimerStatus('Session')), 1000);
+        inputBreakInSeconds.current = breakTime * 60;
+      } else if (inputBreakInSeconds.current < 3) {
+        audioRef.current.play();
+      }
+
+      if (inputBreakInSeconds.current < 59) {
+        dispatch(setTimerEnds(true));
+      } else {
+        dispatch(setTimerEnds(false));
+      }
+    };
+  }
 
 
-
-    } else if (inputTime < 0 && timerStatus === 'Break') {
-      inputTime = dispatch(setInputTime(sessionTime - 1));
-      dispatch(setTimerStatus('Session'));
-      dispatch(setDisplayValue(`${sessionTime / 60}:00`));
+  const timerFunctionIntervall = () => {
+    timerIntervallId.current = setInterval(() => timerFunction(inputSessionInSeconds.current, inputBreakInSeconds.current), 1000);
+  }
 
 
+  const handleStartStop = () => {
+
+    if (timerIntervallStatus.current === 'off') {
+      timerFunctionIntervall();
+      timerIntervallStatus.current = 'on';
+
+    } else if (timerIntervallStatus.current === 'on') {
+      clearInterval(timerIntervallId.current);
+      timerIntervallStatus.current = 'off';
     }
-
   };
 
+  const handleReset = () => {
+    console.log('Hallo');
+    console.log(timerIntervallStatus);
+    console.log(timerIntervallId);
 
+    clearInterval(timerIntervallId.current);
+    inputSessionInSeconds.current = sessionTime * 60 - 1;
+    inputBreakInSeconds.current = breakTime * 60;
+    timerIntervallStatus.current = 'off';
+    timerStatus = 'Session';
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+    dispatch(setTimerStatus(timerStatus));
+    dispatch(setTimerEnds(false));
+    dispatch(setDisplayValue(sessionTime < 10 ? `0${sessionTime}:00` : `${sessionTime}:00`));
+
+  };
 
   return (
     <div id="controlPanel">
 
-      <div onClick={() => handleClick(inputTime)} id="start_stop">
+      <div onClick={handleStartStop} id="start_stop">
         <FaPlay />
         <FaPause />
       </div>
 
-      <div id="reset">
+      <div onClick={handleReset} id="reset">
         <FaSyncAlt />
       </div>
-
+      <audio ref={audioRef} src={Sound}></audio>
     </div>
   );
-}
+};
+

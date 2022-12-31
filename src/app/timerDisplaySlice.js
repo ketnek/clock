@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   status: 'Session',
-  value: '25:00'
+  value: '25:00',
+  timerEnds: false
 }
 export const displaySlice = createSlice({
   name: 'display',
@@ -20,10 +21,13 @@ export const displaySlice = createSlice({
     },
     setTimerStatus: (state, action) => {
       state.status = action.payload;
+    },
+    setTimerEnds: (state, action) => {
+      state.timerEnds = action.payload
     }
   }
 })
 
-export const { increment, decrement, setDisplayValue, setTimerStatus } = displaySlice.actions;
+export const { increment, decrement, setDisplayValue, setTimerStatus, setTimerEnds } = displaySlice.actions;
 
 export default displaySlice.reducer;

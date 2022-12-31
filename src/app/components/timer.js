@@ -11,13 +11,16 @@ export const Timer = () => {
 
   const displayTimerStatus = useSelector(status => status.displayTime.status);
 
+  const timerEnds = useSelector(state => state.displayTime.timerEnds);
+
   return (
     <div id="timer">
       <TimerLabel
-        timerStatus={displayTimerStatus} />
+        timerStatus={displayTimerStatus}
+        timerEnds={timerEnds} />
       <TimerDisplay
         displayTime={displayTime}
-      />
+        timerEnds={timerEnds} />
     </div>
   );
 }
