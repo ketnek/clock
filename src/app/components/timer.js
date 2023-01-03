@@ -7,20 +7,18 @@ import './timer.css';
 
 export const Timer = () => {
 
-  const displayTime = useSelector(state => state.displayTime.value);
-
-  const displayTimerStatus = useSelector(status => status.displayTime.status);
-
-  const timerEnds = useSelector(state => state.displayTime.timerEnds);
+  const displayTime = useSelector(state => state.timer.value);
+  const displayTimerStatus = useSelector(state => state.timer.status);
+  const timerEnds = useSelector(state => state.timer.timerEnds);
 
   return (
     <div id="timer">
       <TimerLabel
-        timerStatus={displayTimerStatus}
-        timerEnds={timerEnds} />
+        timerEnds={timerEnds}
+        displayTimerStatus={displayTimerStatus} />
       <TimerDisplay
-        displayTime={displayTime}
-        timerEnds={timerEnds} />
+        timerEnds={timerEnds}
+        displayTime={displayTime} />
     </div>
   );
 }
