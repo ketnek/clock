@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { FaPlay, FaPause, FaSyncAlt } from 'react-icons/fa';
 import { useDispatch, useSelector } from "react-redux";
-import { setStatus, setTime, setTimerEnds } from "../controlPanelSlice";
+import { setIntervalRuns, setStatus, setTime, setTimerEnds } from "../controlPanelSlice";
 import './controlPanel.css';
 import audio from '../../audio/race-start-beeps-125125.mp3';
+import { resetSession } from "../sessionSlice";
+import { resetBreak } from "../breakSlice";
 
 
 
@@ -11,8 +13,8 @@ export const ControlPanel = () => {
 
   const dispatch = useDispatch();
 
-  const [intervallStatus, setIntervallStatus] = useState(false);
   const [intervallId, setId] = useState('');
+  const intervallStatus = useSelector(state => state.timer.intervalRuns);
 
   const sessionTime = useSelector(state => state.sessionTime.value);
   const breakTime = useSelector(state => state.breakTime.value);
@@ -107,24 +109,30 @@ export const ControlPanel = () => {
   const handleClick = () => {
 
     if (intervallStatus) {
-      setIntervallStatus(false);
+      dispatch(setIntervalRuns(false));
+      audioRef.current.pause();
     } else {
-      setIntervallStatus(true);
+      dispatch(setIntervalRuns(true));
     }
   }
 
 
   const handleReset = () => {
-    clearInterval(intervallId);
-    inputSessionInSeconds = sessionTime * 60 - 1;
-    inputBreakInSeconds = breakTime * 60;
-    timerIntervallStatus = 'off';
-    timerStatus = 'Session';
-    audio.pause();
-    audio.currentTime = 0;
-    timerStatusElement.innerText = timerStatus;
-    timerDisplayElement.style.color = 'black';
-    timerDisplayElement.innerText = sessionTime < 10 ? `0${sessionTime}:00` : `${sessionTime}:00`;
+    dispatch(setIntervalRuns(false));
+    inputSessionTimeInSec.current = '';
+    inputBreakTimeInSec.current = '';
+    timerStatus.current = 'session';
+    audioRef.current.pause();
+    audioRef.current.currentTime = 0;
+    dispatch(setTimerEnds(false));
+    dispatch(setStatus('Session'));
+    dispatch(resetSession());
+    dispatch(resetBreak());
+    dispatch(setTime(
+      sessionTime < 10
+        ? `0${sessionTime}:00`
+        : `${sessionTime}:00`
+    ));
 
   }
 
@@ -136,10 +144,10 @@ export const ControlPanel = () => {
         <FaPause />
       </div>
 
-      <div id="reset">
+      <div onClick={handleReset} id="reset">
         <FaSyncAlt />
       </div>
-      <audio ref={audioRef} src={audio} type="audio/mp3"></audio>
+      <audio id="beep" ref={audioRef} src={audio} type="audio/mp3"></audio>
     </div>
   );
 };

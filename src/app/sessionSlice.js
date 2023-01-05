@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: 1
+  value: 25
 };
 
 const sessionSlice = createSlice({
@@ -9,19 +9,19 @@ const sessionSlice = createSlice({
   initialState,
   reducers: {
     increment(state) {
-      state.value++;
+      state.value < 60 && state.value++;
     },
 
     decrement(state) {
-      state.value--;
+      state.value > 1 && state.value--;
     },
 
-    reset(state) {
+    resetSession(state) {
       state.value = initialState.value;
     }
   }
 });
 
-export const { increment, decrement, reset } = sessionSlice.actions;
+export const { increment, decrement, resetSession } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

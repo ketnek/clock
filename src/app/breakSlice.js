@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: 1
+  value: 5
 };
 
 const breakSlice = createSlice({
@@ -9,19 +9,19 @@ const breakSlice = createSlice({
   initialState,
   reducers: {
     increment(state) {
-      state.value++;
+      state.value < 60 && state.value++;
     },
 
     decrement(state) {
-      state.value--;
+      state.value > 1 && state.value--;
     },
 
-    reset(state) {
+    resetBreak(state) {
       state.value = initialState.value;
     }
   }
 });
 
-export const { increment, decrement, reset } = breakSlice.actions;
+export const { increment, decrement, resetBreak } = breakSlice.actions;
 
 export default breakSlice.reducer;

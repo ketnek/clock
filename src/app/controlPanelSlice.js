@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit"
 const initialState = {
   value: 0,
   status: 'Session',
-  timerEnds: false
+  timerEnds: false,
+  intervalRuns: false
 }
 
 const controlSlice = createSlice({
@@ -18,10 +19,13 @@ const controlSlice = createSlice({
     },
     setTimerEnds: (state, action) => {
       state.timerEnds = action.payload;
+    },
+    setIntervalRuns: (state, action) => {
+      state.intervalRuns = action.payload;
     }
   }
 })
 
-export const { setTime, setStatus, setTimerEnds } = controlSlice.actions;
+export const { setTime, setStatus, setTimerEnds, setIntervalRuns } = controlSlice.actions;
 
 export default controlSlice.reducer;
