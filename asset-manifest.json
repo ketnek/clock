@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/clock/static/css/main.c264be66.css",
+    "main.js": "/clock/static/js/main.38e3add5.js",
+    "static/media/gym.jpg": "/clock/static/media/gym.1516d413be30323748b3.jpg",
+    "static/media/race-start-beeps-125125.mp3": "/clock/static/media/race-start-beeps-125125.b459f9647e80a6861f93.mp3",
+    "index.html": "/clock/index.html",
+    "main.c264be66.css.map": "/clock/static/css/main.c264be66.css.map",
+    "main.38e3add5.js.map": "/clock/static/js/main.38e3add5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c264be66.css",
+    "static/js/main.38e3add5.js"
+  ]
+}
