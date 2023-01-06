@@ -1,5 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit';
-
 import sessionReducer from './sessionSlice';
 import breakReducer from './breakSlice';
 import contolReducer from './controlPanelSlice';

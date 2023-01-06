@@ -16,6 +16,7 @@ export const Timer = () => {
       <TimerLabel
         timerEnds={timerEnds}
         displayTimerStatus={displayTimerStatus} />
+
       <TimerDisplay
         timerEnds={timerEnds}
         displayTime={displayTime} />

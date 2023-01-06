@@ -3,6 +3,7 @@ import './footer.css';
 
 
 export const Footer = () => {
+
   return (
     <div id="footer">
       <p>Designed and Coded by</p>

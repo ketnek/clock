@@ -4,32 +4,38 @@ import { useDispatch, useSelector } from "react-redux";
 import './timeSetter.css'
 
 
-export const TimeSetter = ({ idUp, idDown, idTime, Time, increment, decrement }) => {
-
-  const dispatch = useDispatch();
+export const TimeSetter = ({
+  idUp,
+  idDown,
+  idTime,
+  Time,
+  increment,
+  decrement
+}) => {
 
   const intervalStatus = useSelector(state => state.timer.intervalRuns);
-  const sessionTime = useSelector(state => state.sessionTime.value);
-  const breakTime = useSelector(state => state.breakTime.value);
 
+  const dispatch = useDispatch();
   const handleIncrement = () => dispatch(increment());
-
   const handleDecrement = () => dispatch(decrement());
 
-
   return (
-    <div id="timeSetter">
-      <FaArrowUp
-        className={`arrow ${intervalStatus && 'preventOnClick'}`}
+    <div className="timeSetter">
+
+      <div className={`arrow ${intervalStatus && 'preventOnClick'}`}
         id={idUp}
-        onClick={handleIncrement} />
+        onClick={handleIncrement}>
+        <FaArrowUp />
+      </div>
 
       <p id={idTime}>{Time}</p>
 
-      <FaArrowDown
-        className={`arrow ${intervalStatus && 'preventOnClick'}`}
+      <div className={`arrow ${intervalStatus && 'preventOnClick'}`}
         id={idDown}
-        onClick={handleDecrement} />
+        onClick={handleDecrement}>
+        <FaArrowDown />
+      </div>
+
     </div>
   );
 }
